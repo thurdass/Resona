@@ -33,7 +33,7 @@ class MusicTest extends TestCase
     public function test_real_collection_starts_empty_and_does_not_expose_demo_or_paths(): void
     {
         $this->get('/')->assertOk()->assertSee('Abrir músicas')->assertDontSee('Primeira Luz');
-        $this->getJson('/api/library')->assertOk()->assertJsonCount(0, 'tracks');
+        $this->getJson('/api/library', ['Origin' => 'https://external.invalid'])->assertOk()->assertHeaderMissing('Access-Control-Allow-Origin')->assertJsonCount(0, 'tracks');
         $this->postJson('/internal/import', ['paths' => [$this->audioPath]])->assertForbidden();
         $this->get('/media/'.rawurlencode($this->audioPath))->assertNotFound();
     }
@@ -62,6 +62,22 @@ class MusicTest extends TestCase
         $this->assertSame(0, $result['imported']);
         $this->assertCount(2, $result['errors']);
         $this->assertDatabaseCount('music_tracks', 0);
+    }
+
+    public function test_unreadable_originals_are_reported_and_not_streamed(): void
+    {
+        app(LocalLibrary::class)->import([$this->audioPath]);
+        $id = DB::table('music_tracks')->value('id');
+        chmod($this->audioPath, 0000);
+        clearstatcache(true, $this->audioPath);
+        try {
+            $this->assertFalse(is_readable($this->audioPath));
+            $this->get('/media/'.$id)->assertNotFound();
+            $result = app(LocalLibrary::class)->import([$this->audioPath]);
+            $this->assertCount(1, $result['errors']);
+        } finally {
+            chmod($this->audioPath, 0600);
+        }
     }
 
     public function test_utf8_riff_tags_keep_accents_and_map_product_to_album(): void

@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustHosts(at: ['^127\\.0\\.0\\.1$', '^localhost$'], subdomains: false);
         $middleware->validateCsrfTokens(except: ['internal/import']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
