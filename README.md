@@ -1,68 +1,212 @@
-# Resona
+<p align="center">
+  <img src="public/resona.svg" width="88" height="88" alt="Logo do Resona">
+</p>
 
-Aplicativo desktop Linux com PHP 8.3+, Laravel 13 e shell Electron. Início,
-busca por faixas/artistas/álbuns, páginas de entidades e biblioteca com faixas
-salvas, filtro e ordenação. Identidade própria e catálogo fictício local.
+<h1 align="center">Resona</h1>
 
-## Executar
+<p align="center">
+  <strong>Seu acervo. No seu ritmo.</strong><br>
+  Suas músicas, organizadas em um player local para Windows e Linux.
+</p>
 
-Requisitos: PHP 8.3+ com extensões exigidas pelo Composer (incluindo mbstring,
-DOM/XML e SQLite para os testes padrão), Composer, Node.js 22.12+ e npm,
-sessão gráfica Linux e bibliotecas de runtime do Electron/Chromium.
+<p align="center">
+  <a href="https://github.com/thurdass/Resona/releases/latest">Baixar o Resona</a>
+  &nbsp;·&nbsp;
+  <a href="#conheça-o-resona">Capturas de tela</a>
+  &nbsp;·&nbsp;
+  <a href="#desenvolvimento">Desenvolvimento</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Windows-x64-192337?style=flat-square" alt="Windows x64">
+  <img src="https://img.shields.io/badge/Linux-x64-192337?style=flat-square" alt="Linux x64">
+  <img src="https://img.shields.io/badge/Offline-f0c77b?style=flat-square&labelColor=192337" alt="Funciona offline">
+</p>
+
+---
+
+Abra, selecione suas músicas e dê play. O **Resona** reúne coleção, favoritos,
+álbuns, artistas e playlists em uma interface escura, com controles sempre à mão
+e uma fila que acompanha sua escuta. Tudo funciona offline, sem conta, streaming
+ou telemetria obrigatória.
+
+## Conheça o Resona
+
+### Sua coleção, pronta para tocar
+
+Busque suas faixas, organize favoritos e monte a próxima sequência sem interromper
+a música que está tocando.
+
+![Coleção do Resona com busca, lista de músicas, fila lateral e controles de reprodução](docs/images/resona-collection.png)
+
+### Um espaço para seus álbuns
+
+Explore os álbuns da biblioteca e continue ouvindo enquanto navega entre as telas.
+Capas e informações são lidas das tags dos arquivos; quando faltam, o Resona exibe
+uma capa substituta e identifica os campos desconhecidos.
+
+![Tela de álbuns do Resona com fila aberta e reprodução em andamento](docs/images/resona-albums.png)
+
+## Baixe e comece a ouvir
+
+Os pacotes já incluem **Electron e PHP**. Para usar o aplicativo, você não precisa
+instalar Node, Composer ou PHP separadamente.
+
+| Sistema | Instalar | Usar sem instalador |
+| --- | --- | --- |
+| Windows x64 | [Instalador .exe](https://github.com/thurdass/Resona/releases/download/v0.1.3/Resona-0.1.3-win-x64.exe) | [Pacote .zip](https://github.com/thurdass/Resona/releases/download/v0.1.3/Resona-0.1.3-win-x64.zip) |
+| Linux x64 | [Pacote .deb — Ubuntu/Debian](https://github.com/thurdass/Resona/releases/download/v0.1.3/Resona-0.1.3-linux-amd64.deb) | [Pacote .tar.gz](https://github.com/thurdass/Resona/releases/download/v0.1.3/Resona-0.1.3-linux-x64.tar.gz) |
+
+[Ver todas as releases](https://github.com/thurdass/Resona/releases) ·
+[Conferir SHA-256 dos pacotes](https://github.com/thurdass/Resona/releases/download/v0.1.3/SHA256SUMS.txt)
+
+No Windows, execute o instalador ou extraia **todo o ZIP** e abra `resona.exe`.
+O instalador ainda não tem assinatura digital e pode apresentar aviso de editor
+desconhecido.
+
+No Ubuntu/Debian, abra o `.deb` com o instalador de pacotes ou use:
+
+```bash
+sudo apt install ./Resona-0.1.3-linux-amd64.deb
+```
+
+O `.deb` configura o sandbox do Electron. No pacote `.tar.gz`, extraia os arquivos
+e execute `resona`; a distribuição precisa oferecer bibliotecas gráficas/áudio e
+suporte ao sandbox do Chromium. Os downloads estão no GitHub Releases; o Resona
+ainda não foi publicado na Snap Store.
+
+## Da pasta para o play
+
+1. Clique em **Abrir músicas** para selecionar arquivos ou em **Importar pasta**
+   para incluir uma pasta e suas subpastas. Você também pode arrastar os arquivos
+   para a janela.
+2. Escolha uma faixa ou clique em **Reproduzir seleção**. A importação não inicia
+   a reprodução automaticamente.
+3. Use **+** para adicionar músicas à fila e **×** para removê-las. O menu **•••**
+   reúne as ações de playlist e remoção da coleção.
+
+## Feito para sua biblioteca
+
+| Recurso | O que você pode fazer |
+| --- | --- |
+| Coleção | Buscar por título, artista ou álbum e ordenar as faixas. |
+| Favoritos e playlists | Guardar as preferidas e montar suas próprias seleções. |
+| Fila | Adicionar, remover e acompanhar as próximas músicas. |
+| Reprodução | Pausar, avançar, voltar, buscar na faixa e ajustar o volume. |
+| Aleatório e repetição | Alternar a ordem e repetir uma faixa ou toda a fila. |
+| Continuidade | Navegar entre as telas sem interromper o áudio. |
+| Persistência | Reabrir com biblioteca, playlists, favoritos, fila e preferências salvos. |
+
+**Seus arquivos continuam sendo seus.** O Resona referencia os originais: não
+copia as músicas, não altera tags e não exclui arquivos pessoais. Remover uma
+faixa da coleção só remove sua referência no aplicativo.
+
+A importação evita duplicatas pelo caminho do arquivo. Cópias em pastas distintas
+são itens distintos; arquivos movidos precisam ser importados novamente na nova
+localização. Links simbólicos são ignorados.
+
+**Formatos oferecidos:** MP3, FLAC, WAV, Ogg, Opus, M4A, AAC, AIFF e WebM.
+A reprodução depende dos codecs suportados pelo Electron. Tags e capas
+JPEG/PNG/WebP de até 5 MiB são lidas com getID3.
+
+Biblioteca e preferências ficam no perfil do usuário, em SQLite. No Linux, o
+local padrão é `~/.config/Resona` ou `$XDG_CONFIG_HOME/Resona`; no Windows,
+`%APPDATA%/Resona`. Ao reabrir, o aplicativo aguarda sua ação para tocar.
+A posição da faixa não é restaurada.
+
+## Atalhos de teclado
+
+| Atalho | Ação |
+| --- | --- |
+| `Espaço` | Pausar ou reproduzir |
+| `←` / `→` | Voltar ou avançar 5 segundos |
+| `↑` / `↓` | Aumentar ou diminuir o volume |
+| `Alt` + `←` / `→` | Faixa anterior ou próxima |
+| `Ctrl` + `O` | Abrir músicas |
+
+Campos de texto e controles mantêm seu comportamento ao receber foco.
+A interface mostra o foco de teclado e respeita a preferência por movimento
+reduzido.
+
+## Desenvolvimento
+
+O Resona usa **Laravel 13, PHP 8.3, SQLite e Electron 44**, com JavaScript e CSS
+locais. O shell desktop usa Electron diretamente; NativePHP não está instalado.
+
+### Rodar a partir do código
+
+Requisitos: PHP 8.3+ com PDO SQLite, mbstring, fileinfo, DOM/XML, tokenizer e
+OpenSSL; Composer; Node 22.12+ e npm; uma sessão gráfica compatível com Electron.
 
 ```bash
 composer run setup
-./bin/resona
+npm run desktop
 ```
 
-O shell inicia e encerra seu próprio servidor PHP em `127.0.0.1`, numa porta
-livre. A biblioteca fica em sessões de arquivo no diretório de dados do Electron
-(`~/.config/Resona` por padrão); chave e cookies persistem entre execuções.
-Não precisa de servidor externo ou banco para os fluxos de música.
-Use `RESONA_PHP=/caminho/php` para selecionar outro executável PHP.
+No Linux, você também pode iniciar com `./bin/resona`. O sandbox do Chromium
+precisa estar configurado no ambiente de desenvolvimento.
 
-Para desenvolvimento no navegador: `composer run dev`, acessando o endereço
-local exibido. As sessões do navegador são independentes das sessões desktop.
-CSS e JavaScript são servidos diretamente; não há build Vite.
+O Electron inicia o Laravel em uma porta livre de `127.0.0.1` e encerra o servidor
+junto com o aplicativo. `RESONA_PHP` permite escolher outro executável PHP;
+`RESONA_DATA_DIR` define um perfil separado por caminho absoluto. Fontes, CSS e
+JavaScript são locais, sem Vite ou downloads durante o uso.
 
-Neste host, o helper SUID do Electron não está configurado e a execução padrão
-aborta antes de abrir a janela. O teste visual foi executado em Xvfb/X11 com
-`--no-sandbox`; isso não valida o sandbox de produção. A distribuição desktop
-precisa configurar o sandbox Chromium conforme a política da distribuição Linux.
-Para reproduzir estritamente o teste em sessão virtual:
+### Gerar os pacotes
+
+Execute o comando no sistema de destino, em arquitetura x64:
 
 ```bash
-RESONA_SMOKE_OUTPUT=/tmp/resona-smoke xvfb-run -a npm run desktop:smoke -- --no-sandbox --ozone-platform=x11
+# Linux: .deb e .tar.gz
+npm run package:linux
+
+# Windows: instalador .exe e .zip
+npm run package:windows
 ```
 
-`--no-sandbox` reduz o isolamento do Chromium e não é ativado automaticamente
-pelo Resona. O aplicativo exige instalação local das dependências; ainda não
-há AppImage, pacote DEB ou PHP embarcado.
+Os arquivos são gerados em `dist/release/`. O build inclui dependências PHP de
+produção e baixa um runtime PHP fixado por commit e SHA-256, verificando suas
+extensões. A construção precisa de rede ou caches disponíveis. Perfis de usuário,
+bancos pessoais e músicas originais não entram no pacote.
 
-## Catálogo e áudio
-
-Os três artistas, três álbuns e nove faixas são fictícios, definidos em
-`resources/catalog/demo.php`. Os corações adicionam/removem faixas da biblioteca.
-O player inferior abre arquivos de áudio locais sem upload. As faixas demo
-não têm gravações; não há streaming ou integração com contas do Spotify.
-A reprodução de áudio local termina ao navegar para outra página nesta versão.
-
-## Investigação e rastreabilidade
-
-Consulte [docs/rea/README.md](docs/rea/README.md) para os hashes, Evidence IDs,
-achados estáticos, hipóteses, bloqueios de runtime e a relação com cada fluxo.
-O MCP REA analisou os recursos empacotados do Spotify; sua UI não foi observada
-em execução. Cores, geometria e composição visual são decisões próprias.
-Nenhum código, fonte, imagem ou gravação do Spotify é usado pelo aplicativo.
-
-## Verificação
+### Validar
 
 ```bash
-php artisan test
+php artisan test --compact
 npm run test:desktop
 ```
 
-Os testes cobrem navegação, relações, busca/categorias/estados vazios, validação,
-escape HTML, salvar/remover/filtrar/ordenar, persistência após reiniciar o servidor
-desktop e rejeição de POST sem CSRF. O smoke gráfico testa o DOM real no Electron,
-busca, coração e biblioteca e grava capturas; ele exige sessão gráfica ou Xvfb.
+O [workflow de releases](.github/workflows/release.yml) também instala e executa
+os pacotes em runners Windows e Linux, com sandbox habilitado e áudio WAV/FLAC
+sintético. Ele verifica importação, deduplicação, persistência, fila, controles,
+continuidade durante a navegação, arquivos indisponíveis e janela compacta,
+gravando capturas e relatórios.
+
+Os testes confirmam decodificação e avanço do tempo; **não confirmam saída audível
+em caixas de som**. A seleção do diálogo é automatizada. A validação em runners
+não certifica compatibilidade com todas as distribuições ou configurações de
+hardware.
+
+<details>
+<summary><strong>Arquitetura e acesso aos arquivos</strong></summary>
+
+Laravel/PHP centraliza metadados e persistência. O renderer do Electron permanece
+isolado, com sandbox e uma ponte mínima para selecionar arquivos, selecionar
+pastas e importar arquivos recebidos por arraste.
+
+O processo principal autoriza importações com um segredo aleatório por execução.
+O renderer usa IDs da biblioteca para acessar áudio e capas; não existe rota
+pública de leitura por caminho arbitrário. Mutações exigem CSRF, pedidos externos
+e permissões do renderer são bloqueados, e o servidor atende apenas loopback.
+
+Um único elemento de áudio vive fora das telas, preservando a reprodução durante
+a navegação. A biblioteca persiste em SQLite, independentemente das sessões HTTP.
+
+O catálogo demo é apenas uma fixture histórica. Registros anteriores de
+investigação não representam recursos incluídos no produto. Consulte as
+[evidências da implementação local](docs/rea/local-player.md).
+
+</details>
+
+---
+
+<p align="center"><strong>Resona · Seu acervo. No seu ritmo.</strong></p>

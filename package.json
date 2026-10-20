@@ -1,15 +1,18 @@
 {
     "name": "resona",
-    "version": "0.1.0",
+    "version": "0.1.3",
     "private": true,
     "type": "module",
     "main": "desktop/main.cjs",
     "scripts": {
         "desktop": "electron .",
         "desktop:smoke": "electron . --smoke-test",
-        "test:desktop": "node --test desktop/*.test.cjs"
+        "test:desktop": "node --test desktop/files.test.cjs desktop/player.test.cjs desktop/server.test.cjs",
+        "package:linux": "node desktop/package.cjs",
+        "package:windows": "node desktop/package.cjs"
     },
     "devDependencies": {
-        "electron": "^44.9.1"
+        "electron": "^44.9.1",
+        "electron-builder": "^26.15.3"
     }
 }

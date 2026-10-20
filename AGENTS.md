@@ -119,3 +119,44 @@ Before relying on a package's API, confirm its installed version:
 - Run `vendor/bin/phpunit` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 
 </laravel-boost-guidelines>
+
+
+# Resona: produto local Linux
+
+Objetivo: abrir → selecionar músicas → reproduzir, offline, sem contas,
+streaming ou telemetria obrigatória. Referenciar os originais, sem alterar tags,
+copiar ou excluir arquivos pessoais. O catálogo demo é apenas fixture.
+
+A sessão de desenvolvimento está autorizada a implementar, adicionar dependências
+justificadas, atualizar estas instruções e criar commits locais, sem push.
+Preservar alterações preexistentes e manter entregas verificáveis separadas.
+
+Manter Laravel/PHP centrais. Separar biblioteca/metadados, autorização de arquivos,
+player/fila, interface e shell desktop. A biblioteca deve persistir fora de sessões;
+o áudio deve continuar vivo durante navegação. Renderer isolado e IPC mínimo;
+nunca aceitar caminhos arbitrários da interface em uma rota pública de leitura.
+
+Antes de depender de NativePHP, verificar documentação oficial e compatibilidade
+Linux. Não tratar uma migração ou distribuição ainda não validada como concluída.
+REA serve a perguntas concretas sobre artefatos/runtime, não substitui leitura do
+repositório. Registrar versão/hash, evidência e limitações úteis em docs/rea.
+Não retomar Spotify sem uma pergunta pertinente ao player local.
+
+Validar com áudio sintético: importação, deduplicação, persistência, falhas,
+fila, controles, continuidade, teclado, tamanhos de janela e pacote Linux.
+Distinguir estado do áudio, decodificação/avanço do tempo e saída audível.
+Nunca desligar silenciosamente o sandbox de produção.
+
+Referência confirmada em 2026-10-20 antes da implementação: PHP 8.3.6,
+Laravel 13.37.0, Electron 44.9.1 direto; NativePHP ausente. Testes iniciais:
+3 PHP/52 asserções e 1 Node aprovados. Sem .ai/rules. .agents/ e
+skills-lock.json já eram não rastreados; preservá-los fora dos commits do produto.
+
+Estado implementado nesta entrega: Electron direto + Laravel + SQLite, sem
+NativePHP. `LocalLibrary` importa por autorização do processo principal e lê
+metadados via getID3 1.9.27; `LibraryController` expõe IDs, não caminhos. O
+renderer usa navegação por fragmentos e um único áudio em `public/player.js`.
+Favoritos/playlists/preferências ficam no banco. O servidor desktop migra seu
+banco no perfil antes de abrir a janela. Rotas são locais, sem CORS, hosts apenas
+loopback. `desktop/package.cjs` gera tar Linux x64 com PHP estático fixado por
+hash; não inserir dados do perfil nem arquivos de áudio originais no pacote.

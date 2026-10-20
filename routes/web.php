@@ -1,12 +1,15 @@
 <?php
 
-use App\Http\Controllers\MusicController;
+use App\Http\Controllers\LibraryController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [MusicController::class, 'home'])->name('home');
-Route::get('/search', [MusicController::class, 'search'])->name('search');
-Route::get('/library', [MusicController::class, 'library'])->name('library');
-Route::get('/albums/{id}', [MusicController::class, 'album'])->name('album');
-Route::get('/artists/{id}', [MusicController::class, 'artist'])->name('artist');
-Route::get('/tracks/{id}', [MusicController::class, 'track'])->name('track');
-Route::post('/library/tracks/{id}', [MusicController::class, 'save'])->name('save');
+Route::view('/', 'music')->name('home');
+Route::get('/api/library', [LibraryController::class, 'state']);
+Route::post('/internal/import', [LibraryController::class, 'import']);
+Route::get('/media/{id}', [LibraryController::class, 'audio'])->whereUuid('id')->name('audio');
+Route::get('/covers/{id}', [LibraryController::class, 'cover'])->whereUuid('id')->name('cover');
+Route::put('/api/tracks/{id}/favorite', [LibraryController::class, 'favorite'])->whereUuid('id');
+Route::delete('/api/tracks/{id}', [LibraryController::class, 'remove'])->whereUuid('id');
+Route::put('/api/playlists', [LibraryController::class, 'playlist']);
+Route::delete('/api/playlists/{id}', [LibraryController::class, 'deletePlaylist'])->whereUuid('id');
+Route::put('/api/preferences', [LibraryController::class, 'preferences']);
