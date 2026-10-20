@@ -52,20 +52,27 @@ jobs:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       - name: Install and exercise Linux package with sandbox enabled
         if: runner.os == 'Linux'
+        timeout-minutes: 4
         shell: bash
         run: |
           sudo apt-get install -y ./dist/release/*.deb
-          RESONA_SMOKE_OUTPUT="$RUNNER_TEMP/resona-smoke" xvfb-run -a /opt/Resona/resona --smoke-test
+          RESONA_SMOKE_OUTPUT="$RUNNER_TEMP/resona-smoke" timeout 120s xvfb-run -a dbus-run-session -- /opt/Resona/resona --disable-gpu --ozone-platform=x11 --smoke-test
       - name: Exercise Windows package with sandbox enabled
         if: runner.os == 'Windows'
+        timeout-minutes: 4
         shell: pwsh
         run: |
           $env:RESONA_SMOKE_OUTPUT = "$env:RUNNER_TEMP/resona-smoke"
           $installer = Get-ChildItem dist/release/*.exe | Select-Object -First 1
-          $installDirectory = "$env:RUNNER_TEMP/Resona-installed"
+          $installDirectory = Join-Path $env:RUNNER_TEMP 'Resona-installed'
           $installation = Start-Process -FilePath $installer.FullName -ArgumentList '/S', "/D=$installDirectory" -Wait -PassThru
           if ($installation.ExitCode -ne 0) { throw "Installation failed: $($installation.ExitCode)" }
-          $app = Start-Process -FilePath "$installDirectory/resona.exe" -ArgumentList '--smoke-test' -Wait -PassThru -RedirectStandardOutput "$env:RUNNER_TEMP/resona-stdout.log" -RedirectStandardError "$env:RUNNER_TEMP/resona-stderr.log"
+          Get-ChildItem $installDirectory -ErrorAction Continue
+          if (!(Test-Path "$installDirectory/resona.exe")) {
+            Get-ChildItem "$env:LOCALAPPDATA/Programs" -Filter resona.exe -Recurse -ErrorAction Continue
+            throw 'Installer did not populate the requested directory'
+          }
+          $app = Start-Process -FilePath "$installDirectory/resona.exe" -ArgumentList '--disable-gpu', '--smoke-test' -Wait -PassThru -RedirectStandardOutput "$env:RUNNER_TEMP/resona-stdout.log" -RedirectStandardError "$env:RUNNER_TEMP/resona-stderr.log"
           Get-Content "$env:RUNNER_TEMP/resona-stdout.log"
           Get-Content "$env:RUNNER_TEMP/resona-stderr.log"
           if ($app.ExitCode -ne 0) { throw "Smoke failed: $($app.ExitCode)" }
