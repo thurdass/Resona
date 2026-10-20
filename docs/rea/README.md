@@ -24,9 +24,14 @@ REA inventariou 533 arquivos e 12 diretórios, sem contradições de integridade
 | `ev_58219ca42b433c96b2cac8137640f637e9212b5f8e1226093b26c4b048298af3` | gdb_console(file) | Executável carregado, sem símbolos de depuração |
 | `ev_8ac8db60819fffd0f2770e66b53c60064f7be09e4b9d9d90a61abea79a5e9b53` | gdb_console(run) | Processo iniciado com remote-debugging-port=9223; encerrou com código 01 |
 
-O bundle completo fica em `evidence-bundle.local.json`, ignorado pelo Git:
-contém resultados extensos e fragmentos proprietários, não recursos do Resona.
-Os achados revisáveis e a proveniência ficam neste diretório versionado.
+O bundle de runtime foi exportado para `runtime-evidence.json` versionado
+(também existe a cópia de trabalho `evidence-bundle.local.json`, ignorada pelo Git).
+O resumo original do MCP da análise estática e os metadados do trace foram
+preservados em `static-analysis.json` versionado. O grafo estático completo não
+foi preservado após fechar sua sessão; o resumo não o substitui para auditorias
+de todas as arestas. `feature-evidence.json` preserva quatro observações
+selecionadas do trace de busca com suas localizações e limitações originais.
+Os achados revisáveis e a proveniência ficam neste diretório.
 
 ## Fatos observados nos arquivos, não na interface
 
@@ -77,12 +82,29 @@ faixa (wrappers e listas, parcial); visual e runtime (não resolvidos).
 
 | Evidência estática | Decisão no Resona | Verificação prevista |
 | --- | --- | --- |
-| Busca por query/category e wrappers | Busca local por faixas, artistas e álbuns, categorias e estado vazio | Testes HTTP com consultas e categorias |
-| Álbum: artista e trackList | Página de álbum com artista navegável e lista de faixas | Testes de relações e 404 |
-| Coleção: filtro/sort/empty | Biblioteca de faixas salvas, filtro, ordenação, chamada para busca quando vazia | Testes de persistência e isolamento de sessão |
+| Busca por query/category e wrappers | Busca local por faixas, artistas e álbuns, categorias e estado vazio | `tests/Feature/MusicTest.php`, smoke Electron |
+| Álbum: artista e trackList | Página de álbum com artista navegável e lista de faixas | Testes de relações e 404; captura de álbum no smoke |
+| Coleção: filtro/sort/empty | Biblioteca de faixas salvas, filtro, ordenação, chamada para busca quando vazia | Testes HTTP e `desktop/server.test.cjs` (persistência em reinício e CSRF) |
 | Referências Artist/Track | Páginas de artista e faixa usando relações do catálogo | Testes de navegação |
 | home-v2 presente | Rota início; composição editorial própria, não atribuída ao Spotify | Smoke test |
 
 Identidade violeta/menta, artes geométricas, catálogo fictício, persistência local
 e shell desktop são escolhas próprias. Reprodução de arquivos locais é uma
 extensão própria, sem afirmar equivalência com o streaming do Spotify.
+
+## Validação do Resona (não é evidência do Spotify)
+
+O smoke real no Electron passou em Xvfb/X11 com `--no-sandbox`, usando perfil
+de teste separado: início → busca por aurora → coração → biblioteca → álbum.
+Capturas em `/tmp/resona-smoke-v2/`: home.png, library.png e album.png.
+As capturas de início, biblioteca e álbum foram inspecionadas visualmente.
+O primeiro teste gráfico ficou
+aguardando com janela oculta; o teste final usa janela visível, X11 e watchdog.
+O sandbox padrão do Electron abortou por helper SUID não configurado no host;
+execução com sandbox de produção e empacotamento Linux continuam pendentes.
+
+Validação final: 3 testes PHP de funcionalidades com 52 assertions, 1 teste
+Node de integração desktop, smoke gráfico e `composer validate` aprovados.
+Os dois testes triviais do esqueleto Laravel foram removidos para que a contagem
+represente somente os testes úteis do Resona. Reprodução de áudio e comparação
+visual com o Spotify não foram validadas no runtime.

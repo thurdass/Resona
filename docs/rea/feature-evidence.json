@@ -1,0 +1,410 @@
+{
+  "source_evidence_id": "ev_560372c4696f674b86e70f425449a791722a69074aacb0e1a6ce154a6f58cad5",
+  "source_operation": "trace_application_feature",
+  "source_authority": "analyst-inference",
+  "source_confidence": "inferred",
+  "extraction": "Selected node observations from the returned REA search trace; excerpt is not the complete trace or application graph.",
+  "limitations": [
+    "Artifact identity is unavailable for this observation.",
+    "A trace reports graph relationships, not proof that code executed or that a feature is reachable in every state.",
+    "Native handoffs never open a binary or invoke a provider automatically; snapshot reuse remains provider/profile/target exact.",
+    "Static, native, passive-runtime, inferred, and unknown facts retain their original authority in the returned graph.",
+    "The source application graph is incomplete; unmatched seeds and frontiers remain unknown."
+  ],
+  "nodes": [
+    {
+      "node_id": "jag_node_585f3fdcd785feb8c0ae68a20fbe2247f78793df133ac46ce6726db5253a7bc0",
+      "kind": "endpoint",
+      "identity": {
+        "strategy": "artifact-local-key",
+        "stability": "artifact-version",
+        "artifact_sha256": "22a6008270954c68b9cd5bfdb842b10835ede7b1438fb3ec60d6c6a6aa95db30",
+        "namespace": "network",
+        "key": "[\"candidate\",\"playlist.search_in_playlist\"]"
+      },
+      "observations": [
+        {
+          "label": "network endpoint candidate",
+          "source_map_reference": null,
+          "properties": {
+            "endpoint_kind": "network",
+            "value": "playlist.search_in_playlist",
+            "mechanism": "call:c.Ru.get",
+            "interpretation": "candidate"
+          },
+          "evidence": {
+            "authority": "static-relationship-inference",
+            "state": "inferred",
+            "confidence": "low",
+            "artifact": {
+              "available": true,
+              "artifact_id": "art_22a6008270954c68b9cd5bfdb842b10835ede7b1438fb3ec60d6c6a6aa95db30",
+              "sha256": "22a6008270954c68b9cd5bfdb842b10835ede7b1438fb3ec60d6c6a6aa95db30"
+            },
+            "location": {
+              "available": true,
+              "value": {
+                "kind": "source-range",
+                "source": "xpui-routes-collection-songs.js",
+                "start": {
+                  "line": 1,
+                  "column": 4723
+                },
+                "end": {
+                  "line": 1,
+                  "column": 4762
+                }
+              }
+            },
+            "extractor": {
+              "name": "rea-javascript-artifact-reconstruction",
+              "version": "1",
+              "operation": "classify-static-endpoint-candidate",
+              "executable_sha256": null
+            },
+            "coverage": {
+              "status": "partial",
+              "truncated": false,
+              "omitted_count": null,
+              "limits": []
+            },
+            "limitations": [
+              "Static syntax does not prove that this relationship executes at runtime.",
+              "The unbound method-like argument is only a candidate; its receiver does not establish a network call."
+            ],
+            "evidence_ids": []
+          },
+          "observation_id": "jag_observation_16c141a0026743edf9cda518f8f319e180c36d3e0ee07ed5928212049c23c7ce",
+          "identifier_strategy": {
+            "strategy": "semantic-content-sha256",
+            "stability": "observation-exact"
+          }
+        },
+        {
+          "label": "network endpoint candidate",
+          "source_map_reference": null,
+          "properties": {
+            "endpoint_kind": "network",
+            "value": "playlist.search_in_playlist",
+            "mechanism": "call:c.Ru.get",
+            "interpretation": "candidate"
+          },
+          "evidence": {
+            "authority": "static-relationship-inference",
+            "state": "inferred",
+            "confidence": "low",
+            "artifact": {
+              "available": true,
+              "artifact_id": "art_22a6008270954c68b9cd5bfdb842b10835ede7b1438fb3ec60d6c6a6aa95db30",
+              "sha256": "22a6008270954c68b9cd5bfdb842b10835ede7b1438fb3ec60d6c6a6aa95db30"
+            },
+            "location": {
+              "available": true,
+              "value": {
+                "kind": "source-range",
+                "source": "xpui-routes-collection-songs.js",
+                "start": {
+                  "line": 1,
+                  "column": 3481
+                },
+                "end": {
+                  "line": 1,
+                  "column": 3520
+                }
+              }
+            },
+            "extractor": {
+              "name": "rea-javascript-artifact-reconstruction",
+              "version": "1",
+              "operation": "classify-static-endpoint-candidate",
+              "executable_sha256": null
+            },
+            "coverage": {
+              "status": "partial",
+              "truncated": false,
+              "omitted_count": null,
+              "limits": []
+            },
+            "limitations": [
+              "Static syntax does not prove that this relationship executes at runtime.",
+              "The unbound method-like argument is only a candidate; its receiver does not establish a network call."
+            ],
+            "evidence_ids": []
+          },
+          "observation_id": "jag_observation_6e92fb856e486a333084e70b7bdb9a5aea34ac3de57da06e999f4fb222411edd",
+          "identifier_strategy": {
+            "strategy": "semantic-content-sha256",
+            "stability": "observation-exact"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "jag_node_9a9299f9ad7923bc9934debb2922b94a32e6c40b634bb99a1f2f727dcaaeded8",
+      "kind": "endpoint",
+      "identity": {
+        "strategy": "artifact-local-key",
+        "stability": "artifact-version",
+        "artifact_sha256": "9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7",
+        "namespace": "network",
+        "key": "[\"candidate\",\"search.title.tracks\"]"
+      },
+      "observations": [
+        {
+          "label": "search.title.tracks",
+          "source_map_reference": null,
+          "properties": {
+            "endpoint_kind": "network",
+            "value": "search.title.tracks",
+            "mechanism": "call:m.Ru.get",
+            "interpretation": "candidate"
+          },
+          "evidence": {
+            "authority": "static-relationship-inference",
+            "state": "inferred",
+            "confidence": "low",
+            "artifact": {
+              "available": true,
+              "artifact_id": "art_9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7",
+              "sha256": "9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7"
+            },
+            "location": {
+              "available": true,
+              "value": {
+                "kind": "source-range",
+                "source": "xpui-routes-search.js",
+                "start": {
+                  "line": 1,
+                  "column": 38864
+                },
+                "end": {
+                  "line": 1,
+                  "column": 38895
+                }
+              }
+            },
+            "extractor": {
+              "name": "rea-javascript-artifact-reconstruction",
+              "version": "1",
+              "operation": "classify-static-endpoint-candidate",
+              "executable_sha256": null
+            },
+            "coverage": {
+              "status": "complete",
+              "truncated": false,
+              "omitted_count": 0,
+              "limits": []
+            },
+            "limitations": [
+              "Static syntax does not prove that this relationship executes at runtime.",
+              "The unbound method-like argument is only a candidate; its receiver does not establish a network call."
+            ],
+            "evidence_ids": []
+          },
+          "observation_id": "jag_observation_1ce86363b3bd44e40c84c7aab03e127deac435e8426290963f7f192b341020bf",
+          "identifier_strategy": {
+            "strategy": "semantic-content-sha256",
+            "stability": "observation-exact"
+          }
+        },
+        {
+          "label": "search.title.tracks",
+          "source_map_reference": null,
+          "properties": {
+            "endpoint_kind": "network",
+            "value": "search.title.tracks",
+            "mechanism": "call:m.Ru.get",
+            "interpretation": "candidate"
+          },
+          "evidence": {
+            "authority": "static-relationship-inference",
+            "state": "inferred",
+            "confidence": "low",
+            "artifact": {
+              "available": true,
+              "artifact_id": "art_9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7",
+              "sha256": "9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7"
+            },
+            "location": {
+              "available": true,
+              "value": {
+                "kind": "source-range",
+                "source": "xpui-routes-search.js",
+                "start": {
+                  "line": 1,
+                  "column": 38673
+                },
+                "end": {
+                  "line": 1,
+                  "column": 38704
+                }
+              }
+            },
+            "extractor": {
+              "name": "rea-javascript-artifact-reconstruction",
+              "version": "1",
+              "operation": "classify-static-endpoint-candidate",
+              "executable_sha256": null
+            },
+            "coverage": {
+              "status": "complete",
+              "truncated": false,
+              "omitted_count": 0,
+              "limits": []
+            },
+            "limitations": [
+              "Static syntax does not prove that this relationship executes at runtime.",
+              "The unbound method-like argument is only a candidate; its receiver does not establish a network call."
+            ],
+            "evidence_ids": []
+          },
+          "observation_id": "jag_observation_6fca75bce3320e3a62d030c3fd002896352e4ae31fae1d54fdb10c2221da5b1a",
+          "identifier_strategy": {
+            "strategy": "semantic-content-sha256",
+            "stability": "observation-exact"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "jag_node_b3c45539aa70729b9e31c822eb3472e40855185ec112c4915bec76d544f114d9",
+      "kind": "endpoint",
+      "identity": {
+        "strategy": "artifact-local-key",
+        "stability": "artifact-version",
+        "artifact_sha256": "9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7",
+        "namespace": "network",
+        "key": "[\"candidate\",\"search.empty-results-title\"]"
+      },
+      "observations": [
+        {
+          "label": "search.empty-results-title",
+          "source_map_reference": null,
+          "properties": {
+            "endpoint_kind": "network",
+            "value": "search.empty-results-title",
+            "mechanism": "call:m.Ru.get",
+            "interpretation": "candidate"
+          },
+          "evidence": {
+            "authority": "static-relationship-inference",
+            "state": "inferred",
+            "confidence": "low",
+            "artifact": {
+              "available": true,
+              "artifact_id": "art_9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7",
+              "sha256": "9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7"
+            },
+            "location": {
+              "available": true,
+              "value": {
+                "kind": "source-range",
+                "source": "xpui-routes-search.js",
+                "start": {
+                  "line": 1,
+                  "column": 5878
+                },
+                "end": {
+                  "line": 1,
+                  "column": 5918
+                }
+              }
+            },
+            "extractor": {
+              "name": "rea-javascript-artifact-reconstruction",
+              "version": "1",
+              "operation": "classify-static-endpoint-candidate",
+              "executable_sha256": null
+            },
+            "coverage": {
+              "status": "complete",
+              "truncated": false,
+              "omitted_count": 0,
+              "limits": []
+            },
+            "limitations": [
+              "Static syntax does not prove that this relationship executes at runtime.",
+              "The unbound method-like argument is only a candidate; its receiver does not establish a network call."
+            ],
+            "evidence_ids": []
+          },
+          "observation_id": "jag_observation_216f7af5487aa1649755c063475edfefbab786bd3cb5c88626a0a16d7df80725",
+          "identifier_strategy": {
+            "strategy": "semantic-content-sha256",
+            "stability": "observation-exact"
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "jag_node_e50c6be5817e87b616bc352739c2430a8948c3b6e09b68a52e0a5953162e58d9",
+      "kind": "endpoint",
+      "identity": {
+        "strategy": "artifact-local-key",
+        "stability": "artifact-version",
+        "artifact_sha256": "9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7",
+        "namespace": "network",
+        "key": "[\"candidate\",\"search.title.top-result\"]"
+      },
+      "observations": [
+        {
+          "label": "search.title.top-result",
+          "source_map_reference": null,
+          "properties": {
+            "endpoint_kind": "network",
+            "value": "search.title.top-result",
+            "mechanism": "call:m.Ru.get",
+            "interpretation": "candidate"
+          },
+          "evidence": {
+            "authority": "static-relationship-inference",
+            "state": "inferred",
+            "confidence": "low",
+            "artifact": {
+              "available": true,
+              "artifact_id": "art_9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7",
+              "sha256": "9906a5b28a94036ed6fde8267ce6657cc89d62f23d008f6ccb4d05c0d56b8ce7"
+            },
+            "location": {
+              "available": true,
+              "value": {
+                "kind": "source-range",
+                "source": "xpui-routes-search.js",
+                "start": {
+                  "line": 1,
+                  "column": 39442
+                },
+                "end": {
+                  "line": 1,
+                  "column": 39477
+                }
+              }
+            },
+            "extractor": {
+              "name": "rea-javascript-artifact-reconstruction",
+              "version": "1",
+              "operation": "classify-static-endpoint-candidate",
+              "executable_sha256": null
+            },
+            "coverage": {
+              "status": "complete",
+              "truncated": false,
+              "omitted_count": 0,
+              "limits": []
+            },
+            "limitations": [
+              "Static syntax does not prove that this relationship executes at runtime.",
+              "The unbound method-like argument is only a candidate; its receiver does not establish a network call."
+            ],
+            "evidence_ids": []
+          },
+          "observation_id": "jag_observation_88561294cc6c3f07ce5e2ffd0cf7d4363cb187872e411479c1c20066a954df15",
+          "identifier_strategy": {
+            "strategy": "semantic-content-sha256",
+            "stability": "observation-exact"
+          }
+        }
+      ]
+    }
+  ]
+}
