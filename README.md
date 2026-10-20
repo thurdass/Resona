@@ -1,119 +1,212 @@
-# Resona
+<p align="center">
+  <img src="public/resona.svg" width="88" height="88" alt="Logo do Resona">
+</p>
 
-Player de músicas locais para desktop Linux. Abra o aplicativo, importe arquivos
-ou pastas e escolha uma faixa para reproduzir. Funciona offline, sem contas,
-streaming, telemetria ou recursos remotos obrigatórios.
+<h1 align="center">Resona</h1>
 
-## Executar
+<p align="center">
+  <strong>Seu acervo. No seu ritmo.</strong><br>
+  Suas músicas, organizadas em um player local para Windows e Linux.
+</p>
 
-Desenvolvimento: PHP 8.3+ (PDO SQLite, mbstring, fileinfo, DOM/XML, tokenizer,
-OpenSSL), Composer, Node 22.12+ e npm; sessão gráfica e bibliotecas do Electron.
+<p align="center">
+  <a href="https://github.com/thurdass/Resona/releases/latest">Baixar o Resona</a>
+  &nbsp;·&nbsp;
+  <a href="#conheça-o-resona">Capturas de tela</a>
+  &nbsp;·&nbsp;
+  <a href="#desenvolvimento">Desenvolvimento</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Windows-x64-192337?style=flat-square" alt="Windows x64">
+  <img src="https://img.shields.io/badge/Linux-x64-192337?style=flat-square" alt="Linux x64">
+  <img src="https://img.shields.io/badge/Offline-f0c77b?style=flat-square&labelColor=192337" alt="Funciona offline">
+</p>
+
+---
+
+Abra, selecione suas músicas e dê play. O **Resona** reúne coleção, favoritos,
+álbuns, artistas e playlists em uma interface escura, com controles sempre à mão
+e uma fila que acompanha sua escuta. Tudo funciona offline, sem conta, streaming
+ou telemetria obrigatória.
+
+## Conheça o Resona
+
+### Sua coleção, pronta para tocar
+
+Busque suas faixas, organize favoritos e monte a próxima sequência sem interromper
+a música que está tocando.
+
+![Coleção do Resona com busca, lista de músicas, fila lateral e controles de reprodução](docs/images/resona-collection.png)
+
+### Um espaço para seus álbuns
+
+Explore os álbuns da biblioteca e continue ouvindo enquanto navega entre as telas.
+Capas e informações são lidas das tags dos arquivos; quando faltam, o Resona exibe
+uma capa substituta e identifica os campos desconhecidos.
+
+![Tela de álbuns do Resona com fila aberta e reprodução em andamento](docs/images/resona-albums.png)
+
+## Baixe e comece a ouvir
+
+Os pacotes já incluem **Electron e PHP**. Para usar o aplicativo, você não precisa
+instalar Node, Composer ou PHP separadamente.
+
+| Sistema | Instalar | Usar sem instalador |
+| --- | --- | --- |
+| Windows x64 | [Instalador .exe](https://github.com/thurdass/Resona/releases/download/v0.1.3/Resona-0.1.3-win-x64.exe) | [Pacote .zip](https://github.com/thurdass/Resona/releases/download/v0.1.3/Resona-0.1.3-win-x64.zip) |
+| Linux x64 | [Pacote .deb — Ubuntu/Debian](https://github.com/thurdass/Resona/releases/download/v0.1.3/Resona-0.1.3-linux-amd64.deb) | [Pacote .tar.gz](https://github.com/thurdass/Resona/releases/download/v0.1.3/Resona-0.1.3-linux-x64.tar.gz) |
+
+[Ver todas as releases](https://github.com/thurdass/Resona/releases) ·
+[Conferir SHA-256 dos pacotes](https://github.com/thurdass/Resona/releases/download/v0.1.3/SHA256SUMS.txt)
+
+No Windows, execute o instalador ou extraia **todo o ZIP** e abra `resona.exe`.
+O instalador ainda não tem assinatura digital e pode apresentar aviso de editor
+desconhecido.
+
+No Ubuntu/Debian, abra o `.deb` com o instalador de pacotes ou use:
+
+```bash
+sudo apt install ./Resona-0.1.3-linux-amd64.deb
+```
+
+O `.deb` configura o sandbox do Electron. No pacote `.tar.gz`, extraia os arquivos
+e execute `resona`; a distribuição precisa oferecer bibliotecas gráficas/áudio e
+suporte ao sandbox do Chromium. Os downloads estão no GitHub Releases; o Resona
+ainda não foi publicado na Snap Store.
+
+## Da pasta para o play
+
+1. Clique em **Abrir músicas** para selecionar arquivos ou em **Importar pasta**
+   para incluir uma pasta e suas subpastas. Você também pode arrastar os arquivos
+   para a janela.
+2. Escolha uma faixa ou clique em **Reproduzir seleção**. A importação não inicia
+   a reprodução automaticamente.
+3. Use **+** para adicionar músicas à fila e **×** para removê-las. O menu **•••**
+   reúne as ações de playlist e remoção da coleção.
+
+## Feito para sua biblioteca
+
+| Recurso | O que você pode fazer |
+| --- | --- |
+| Coleção | Buscar por título, artista ou álbum e ordenar as faixas. |
+| Favoritos e playlists | Guardar as preferidas e montar suas próprias seleções. |
+| Fila | Adicionar, remover e acompanhar as próximas músicas. |
+| Reprodução | Pausar, avançar, voltar, buscar na faixa e ajustar o volume. |
+| Aleatório e repetição | Alternar a ordem e repetir uma faixa ou toda a fila. |
+| Continuidade | Navegar entre as telas sem interromper o áudio. |
+| Persistência | Reabrir com biblioteca, playlists, favoritos, fila e preferências salvos. |
+
+**Seus arquivos continuam sendo seus.** O Resona referencia os originais: não
+copia as músicas, não altera tags e não exclui arquivos pessoais. Remover uma
+faixa da coleção só remove sua referência no aplicativo.
+
+A importação evita duplicatas pelo caminho do arquivo. Cópias em pastas distintas
+são itens distintos; arquivos movidos precisam ser importados novamente na nova
+localização. Links simbólicos são ignorados.
+
+**Formatos oferecidos:** MP3, FLAC, WAV, Ogg, Opus, M4A, AAC, AIFF e WebM.
+A reprodução depende dos codecs suportados pelo Electron. Tags e capas
+JPEG/PNG/WebP de até 5 MiB são lidas com getID3.
+
+Biblioteca e preferências ficam no perfil do usuário, em SQLite. No Linux, o
+local padrão é `~/.config/Resona` ou `$XDG_CONFIG_HOME/Resona`; no Windows,
+`%APPDATA%/Resona`. Ao reabrir, o aplicativo aguarda sua ação para tocar.
+A posição da faixa não é restaurada.
+
+## Atalhos de teclado
+
+| Atalho | Ação |
+| --- | --- |
+| `Espaço` | Pausar ou reproduzir |
+| `←` / `→` | Voltar ou avançar 5 segundos |
+| `↑` / `↓` | Aumentar ou diminuir o volume |
+| `Alt` + `←` / `→` | Faixa anterior ou próxima |
+| `Ctrl` + `O` | Abrir músicas |
+
+Campos de texto e controles mantêm seu comportamento ao receber foco.
+A interface mostra o foco de teclado e respeita a preferência por movimento
+reduzido.
+
+## Desenvolvimento
+
+O Resona usa **Laravel 13, PHP 8.3, SQLite e Electron 44**, com JavaScript e CSS
+locais. O shell desktop usa Electron diretamente; NativePHP não está instalado.
+
+### Rodar a partir do código
+
+Requisitos: PHP 8.3+ com PDO SQLite, mbstring, fileinfo, DOM/XML, tokenizer e
+OpenSSL; Composer; Node 22.12+ e npm; uma sessão gráfica compatível com Electron.
 
 ```bash
 composer run setup
-./bin/resona
+npm run desktop
 ```
 
-O Electron inicia e encerra o Laravel em uma porta livre de `127.0.0.1`.
-`RESONA_PHP` seleciona outro executável PHP; `RESONA_DATA_DIR` seleciona um
-perfil separado (caminho absoluto). CSS, JavaScript e DejaVu Sans são locais,
-sem Vite ou downloads durante o uso.
+No Linux, você também pode iniciar com `./bin/resona`. O sandbox do Chromium
+precisa estar configurado no ambiente de desenvolvimento.
 
-## Sua coleção
+O Electron inicia o Laravel em uma porta livre de `127.0.0.1` e encerra o servidor
+junto com o aplicativo. `RESONA_PHP` permite escolher outro executável PHP;
+`RESONA_DATA_DIR` define um perfil separado por caminho absoluto. Fontes, CSS e
+JavaScript são locais, sem Vite ou downloads durante o uso.
 
-- **Abrir músicas** seleciona vários arquivos; **Importar pasta** percorre
-  subpastas. Arraste arquivos sobre a janela para importar.
-- Importar não inicia áudio. Clique em uma faixa ou em **Reproduzir seleção**.
-- Coleção, favoritos, álbuns, artistas e playlists usam os arquivos importados.
-  Busque por título, artista ou álbum e ordene a lista.
-- **+** adiciona à fila; **×** remove da fila. O menu **•••** inclui ações de
-  playlist e remoção da coleção. Remover nunca apaga o arquivo original.
-- Transporte inferior: pausa, anterior, próxima, posição, volume, aleatório e
-  repetição desligada / toda a fila / uma faixa. Navegação preserva o mesmo áudio.
-- Biblioteca, playlists, favoritos, volume, repetição, aleatório e fila persistem
-  em SQLite em `~/.config/Resona/library.sqlite` (ou `$XDG_CONFIG_HOME/Resona`).
-  Ao reabrir, a reprodução aguarda ação explícita. A posição não é restaurada.
-- O importador referencia caminhos canônicos e evita duplicatas por caminho;
-  cópias em locais distintos são itens distintos. Links simbólicos são ignorados
-  na importação para evitar ciclos e atravessamento inesperado de pastas.
-- getID3 lê tags e capas (JPEG/PNG/WebP até 5 MiB). Campos ausentes recebem nomes
-  legíveis e capa substituta. Não há edição de tags nem cópia das músicas.
-- Formatos oferecidos: MP3, FLAC, WAV, Ogg, Opus, M4A, AAC, AIFF e WebM.
-  Decodificação depende do codec suportado pelo Electron; falhas indicam ação
-  útil e a fila procura outra faixa, sem repetição infinita de arquivos inválidos.
-  Arquivos movidos precisam ser importados na localização atual.
+### Gerar os pacotes
 
-Atalhos: Espaço pausa/reproduz; ←/→ busca 5 s; ↑/↓ ajusta volume;
-Alt+←/→ muda de faixa; Ctrl+O abre músicas. Controles e campos mantêm seu
-comportamento próprio ao receber foco. A janela permite abrir/fechar a fila,
-mostra foco e respeita movimento reduzido.
-
-## Arquitetura e limites de acesso
-
-Laravel/PHP centraliza metadados e persistência; SQLite elimina dependência de
-sessões HTTP. Electron mantém renderer isolado, sandbox habilitado e três
-operações na ponte: escolher arquivos, escolher pasta e importar objetos File
-recebidos por arraste. O processo principal autoriza a importação com segredo
-aleatório por execução; o renderer nunca recebe esse segredo nem caminhos.
-Áudio e capas usam IDs da biblioteca; não há rota pública de leitura por caminho.
-As mutações da interface exigem CSRF. Pedidos externos e permissões do renderer
-são bloqueados. O serviço PHP atende apenas loopback; não é um servidor público.
-
-Um único elemento de áudio vive fora das telas, renderizadas no mesmo documento.
-NativePHP não está instalado: sua documentação v2 indica PHP 8.3+, Laravel 11+,
-Node 22+ e Linux, mas usa Electron e não demonstrou vantagem que justificasse
-migrar o shell existente. Veja [instalação oficial](https://nativephp.com/docs/desktop/2/getting-started/installation).
-
-## Pacote Linux x64
+Execute o comando no sistema de destino, em arquitetura x64:
 
 ```bash
+# Linux: .deb e .tar.gz
 npm run package:linux
-tar -xzf dist/resona-linux-x64.tar.gz
-./resona-linux-x64/resona
+
+# Windows: instalador .exe e .zip
+npm run package:windows
 ```
 
-O arquivo contém Electron 44.9.1, código Laravel, dependências de produção,
-fontes e PHP 8.3.31 estático com SQLite e extensões necessárias. Não requer PHP,
-Composer ou Node instalados no computador de destino. Ainda requer bibliotecas
-gráficas/áudio do Linux e sandbox Chromium funcional. É um diretório portátil
-compactado, sem instalador DEB/AppImage ou atualização automática.
+Os arquivos são gerados em `dist/release/`. O build inclui dependências PHP de
+produção e baixa um runtime PHP fixado por commit e SHA-256, verificando suas
+extensões. A construção precisa de rede ou caches disponíveis. Perfis de usuário,
+bancos pessoais e músicas originais não entram no pacote.
 
-O build baixa PHP do projeto oficial `NativePHP/php-bin`, fixado por commit e
-SHA-256 no empacotador, e verifica as extensões. A primeira construção precisa de
-rede ou caches preenchidos; o aplicativo instalado não. Os originais e o perfil
-do desenvolvedor não entram no pacote. O diretório `dist/` não é versionado.
-
-O pacote foi extraído e executado em `/tmp`, usando seu PHP embarcado, com o
-mesmo smoke da árvore de desenvolvimento. O teste configura proxy externo sem
-serviço e exceção para loopback; isso simula indisponibilidade externa sem mudar
-a rede do host. Não é uma certificação de compatibilidade com todas as distros.
-
-## Verificação
+### Validar
 
 ```bash
 php artisan test --compact
 npm run test:desktop
-RESONA_SMOKE_OUTPUT=/tmp/resona-smoke xvfb-run -a npm run desktop:smoke -- --no-sandbox --ozone-platform=x11
 ```
 
-Os testes PHP cobrem importação real, UTF-8, duplicatas, arquivos inválidos e
-removidos, autorização, ranges, favoritos, playlists, preferências e preservação
-dos originais. Node verifica persistência após reiniciar o servidor, CSRF e regras
-de fila. O smoke usa FFmpeg para gerar WAV/FLAC sintéticos, exercita Electron,
-ponte de arraste com File real, controles, continuidade, término natural,
-persistência, erros e duas dimensões de janela; grava capturas e `results.json`.
-A seleção do diálogo é automatizada no smoke; não comprova interação humana com
-o seletor do sistema. Estado do elemento, decodificação e avanço do tempo são
-verificados; saída audível não é confirmada.
+O [workflow de releases](.github/workflows/release.yml) também instala e executa
+os pacotes em runners Windows e Linux, com sandbox habilitado e áudio WAV/FLAC
+sintético. Ele verifica importação, deduplicação, persistência, fila, controles,
+continuidade durante a navegação, arquivos indisponíveis e janela compacta,
+gravando capturas e relatórios.
 
-Neste host, o sandbox Chromium não está configurado para a sessão virtual.
-`--no-sandbox` é explícito e restrito ao comando de teste acima; o Resona não o
-ativa automaticamente. A execução Linux normal exige suporte ao sandbox Chromium
-na distribuição. Não alteramos configurações globais ou permissões SUID.
+Os testes confirmam decodificação e avanço do tempo; **não confirmam saída audível
+em caixas de som**. A seleção do diálogo é automatizada. A validação em runners
+não certifica compatibilidade com todas as distribuições ou configurações de
+hardware.
 
-O catálogo em `resources/catalog/demo.php` é fixture histórica, sem rotas de
-produto. Evidências anteriores de Spotify em `docs/rea` permanecem históricas;
-a investigação atual usa o próprio Electron/Resona. Nenhum recurso do Spotify
-é incluído no aplicativo.
+<details>
+<summary><strong>Arquitetura e acesso aos arquivos</strong></summary>
 
-Evidências da entrega local: [docs/rea/local-player.md](docs/rea/local-player.md).
+Laravel/PHP centraliza metadados e persistência. O renderer do Electron permanece
+isolado, com sandbox e uma ponte mínima para selecionar arquivos, selecionar
+pastas e importar arquivos recebidos por arraste.
+
+O processo principal autoriza importações com um segredo aleatório por execução.
+O renderer usa IDs da biblioteca para acessar áudio e capas; não existe rota
+pública de leitura por caminho arbitrário. Mutações exigem CSRF, pedidos externos
+e permissões do renderer são bloqueados, e o servidor atende apenas loopback.
+
+Um único elemento de áudio vive fora das telas, preservando a reprodução durante
+a navegação. A biblioteca persiste em SQLite, independentemente das sessões HTTP.
+
+O catálogo demo é apenas uma fixture histórica. Registros anteriores de
+investigação não representam recursos incluídos no produto. Consulte as
+[evidências da implementação local](docs/rea/local-player.md).
+
+</details>
+
+---
+
+<p align="center"><strong>Resona · Seu acervo. No seu ritmo.</strong></p>
