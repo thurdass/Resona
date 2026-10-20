@@ -3,6 +3,7 @@ name: Desktop releases
 on:
   push:
     tags: ['v*']
+    branches: ['feat/local-music-player']
 
 permissions:
   contents: read
@@ -32,6 +33,7 @@ jobs:
           composer install --prefer-dist --no-interaction
           npm ci
       - name: Check release version
+        if: startsWith(github.ref, 'refs/tags/')
         shell: bash
         run: node -e 'if (process.env.GITHUB_REF_NAME !== "v" + require("./package.json").version) process.exit(1)'
       - name: PHP tests
@@ -90,6 +92,7 @@ jobs:
 
   publish:
     needs: build
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
     permissions:
       contents: write

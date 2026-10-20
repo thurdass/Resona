@@ -12,6 +12,6 @@ test('folder discovery handles special names, deduplicates paths, ignores links 
         const text = path.join(folder, 'texto.txt'); await fs.writeFile(text, 'text');
         await fs.symlink(root, path.join(folder, 'loop'), process.platform === 'win32' ? 'junction' : 'dir');
         const result = await collectAudio([folder, audio, text, path.join(root, 'missing')]);
-        assert.deepEqual(result.files, [audio]); assert.equal(result.errors.length, 3);
+        assert.deepEqual(result.files, [await fs.realpath(audio)]); assert.equal(result.errors.length, 3);
     } finally { await fs.rm(root, { recursive: true, force: true }); }
 });
