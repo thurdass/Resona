@@ -66,3 +66,9 @@ Os testes cobrem navegação, relações, busca/categorias/estados vazios, valid
 escape HTML, salvar/remover/filtrar/ordenar, persistência após reiniciar o servidor
 desktop e rejeição de POST sem CSRF. O smoke gráfico testa o DOM real no Electron,
 busca, coração e biblioteca e grava capturas; ele exige sessão gráfica ou Xvfb.
+
+## Direção do produto
+
+O desenvolvimento atual substitui o catálogo demonstrativo por uma coleção de
+arquivos reais, persistência local, fila e reprodução contínua. A descrição acima
+registra a referência anterior; cada entrega atualizará os fluxos disponíveis.
