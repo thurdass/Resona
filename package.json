@@ -7,10 +7,12 @@
     "scripts": {
         "desktop": "electron .",
         "desktop:smoke": "electron . --smoke-test",
-        "test:desktop": "node --test desktop/*.test.cjs",
-        "package:linux": "node desktop/package.cjs"
+        "test:desktop": "node --test desktop/files.test.cjs desktop/player.test.cjs desktop/server.test.cjs",
+        "package:linux": "node desktop/package.cjs",
+        "package:windows": "node desktop/package.cjs"
     },
     "devDependencies": {
-        "electron": "^44.9.1"
+        "electron": "^44.9.1",
+        "electron-builder": "^26.15.3"
     }
 }

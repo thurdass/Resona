@@ -26,12 +26,15 @@ async function startServer(root, dataPath, php = 'php') {
     const port = await freePort();
     const origin = `http://127.0.0.1:${port}`;
     const environment = { ...process.env, DB_URL: '', DB_CONNECTION: 'sqlite', DB_DATABASE: database, RESONA_IMPORT_TOKEN: importToken, APP_NAME: 'Resona', APP_ENV: 'production', APP_DEBUG: 'false', APP_KEY: key.trim(), APP_URL: origin, APP_CONFIG_CACHE: path.join(dataPath, 'config.php'), SESSION_DRIVER: 'file', SESSION_FILES: path.join(dataPath, 'sessions'), SESSION_COOKIE: 'resona_session', CACHE_STORE: 'array', LOG_CHANNEL: 'stderr', VIEW_COMPILED_PATH: path.join(dataPath, 'views') };
-    const migration = spawnSync(php, [path.join(root, 'artisan'), 'migrate', '--force', '--no-interaction'], { cwd: root, env: environment, encoding: 'utf8' });
+    environment.APP_PACKAGES_CACHE = path.join(dataPath, 'packages.php');
+    environment.APP_SERVICES_CACHE = path.join(dataPath, 'services.php');
+    const migration = spawnSync(php, [path.join(root, 'artisan'), 'migrate', '--force', '--no-interaction'], { cwd: root, env: environment, encoding: 'utf8', windowsHide: true });
     if (migration.status !== 0) throw new Error(`Falha na migração: ${migration.stderr || migration.stdout}`);
     const child = spawn(php, ['-S', `127.0.0.1:${port}`, '-t', path.join(root, 'public'), path.join(root, 'desktop/router.php')], {
         cwd: root,
         env: environment,
         stdio: ['ignore', 'ignore', 'pipe'],
+        windowsHide: true,
     });
     let failure;
     let logs = '';

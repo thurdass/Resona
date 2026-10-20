@@ -17,7 +17,7 @@ if (!app.requestSingleInstanceLock()) app.quit();
 else {
     app.on('second-instance', () => { const win = BrowserWindow.getAllWindows()[0]; if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
     app.whenReady().then(async () => {
-        server = await startServer(root, app.getPath('userData'), process.env.RESONA_PHP || (app.isPackaged ? path.join(process.resourcesPath, 'php/bin/php') : 'php'));
+        server = await startServer(root, app.getPath('userData'), process.env.RESONA_PHP || (app.isPackaged ? path.join(process.resourcesPath, 'php', 'bin', process.platform === 'win32' ? 'php.exe' : 'php') : 'php'));
         const win = new BrowserWindow({ width: 1280, height: 850, minWidth: 640, minHeight: 600, title: 'Resona', backgroundColor: '#141c2b',
             icon: path.join(root, 'public/resona.svg'), show: true,
             webPreferences: { preload: path.join(__dirname, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, backgroundThrottling: !smoke, partition: 'persist:resona' } });
