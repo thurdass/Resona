@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -eu
+cd "$(dirname "$0")/.."
+if ! command -v php >/dev/null 2>&1; then
+    echo 'Resona precisa de PHP 8.3 ou superior.' >&2
+    exit 1
+fi
+if [ ! -f vendor/autoload.php ] || [ ! -f node_modules/electron/path.txt ]; then
+    echo 'Execute composer run setup antes de abrir o Resona.' >&2
+    exit 1
+fi
+exec node node_modules/electron/cli.js . "$@"

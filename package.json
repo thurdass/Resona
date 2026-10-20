@@ -1,0 +1,15 @@
+{
+    "name": "resona",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "main": "desktop/main.cjs",
+    "scripts": {
+        "desktop": "electron .",
+        "desktop:smoke": "electron . --smoke-test",
+        "test:desktop": "node --test desktop/*.test.cjs"
+    },
+    "devDependencies": {
+        "electron": "^44.9.1"
+    }
+}
