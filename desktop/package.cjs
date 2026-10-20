@@ -47,7 +47,7 @@ async function packageApplication() {
     command('composer', ['install', '--no-dev', '--prefer-dist', '--no-interaction', '--no-scripts', '--optimize-autoloader'], appRoot);
     await fs.mkdir(phpDirectory, { recursive: true });
     if (process.platform === 'win32') {
-        command('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', 'Expand-Archive -LiteralPath $env.RESONA_PHP_ARCHIVE -DestinationPath $env.RESONA_PHP_DESTINATION -Force'], root, { ...process.env, RESONA_PHP_ARCHIVE: archive, RESONA_PHP_DESTINATION: phpDirectory });
+        command('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', 'Expand-Archive -LiteralPath $env:RESONA_PHP_ARCHIVE -DestinationPath $env:RESONA_PHP_DESTINATION -Force'], root, { ...process.env, RESONA_PHP_ARCHIVE: archive, RESONA_PHP_DESTINATION: phpDirectory });
     } else {
         command('unzip', ['-oq', archive, '-d', phpDirectory]);
         await fs.chmod(path.join(phpDirectory, runtime.executable), 0o755);

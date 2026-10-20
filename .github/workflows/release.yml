@@ -54,7 +54,7 @@ jobs:
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          sudo dpkg -i dist/release/*.deb
+          sudo apt-get install -y ./dist/release/*.deb
           RESONA_SMOKE_OUTPUT="$RUNNER_TEMP/resona-smoke" xvfb-run -a /opt/Resona/resona --smoke-test
       - name: Exercise Windows package with sandbox enabled
         if: runner.os == 'Windows'
