@@ -66,6 +66,10 @@ class MusicTest extends TestCase
 
     public function test_unreadable_originals_are_reported_and_not_streamed(): void
     {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->markTestSkipped('Windows does not implement POSIX file permission bits.');
+        }
+
         app(LocalLibrary::class)->import([$this->audioPath]);
         $id = DB::table('music_tracks')->value('id');
         chmod($this->audioPath, 0000);

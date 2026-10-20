@@ -63,7 +63,7 @@ async function packageApplication() {
             appId: 'com.thurdass.resona', productName: 'Resona', executableName: 'resona',
             electronVersion: require('electron/package.json').version,
             directories: { app: appRoot, output: path.join(root, 'dist/release') },
-            asar: false, npmRebuild: false,
+            asar: false, npmRebuild: false, compression: 'normal',
             files: ['**/*'],
             extraResources: [{ from: path.join(stage, 'php'), to: 'php' }],
             artifactName: 'Resona-${version}-${os}-${arch}.${ext}',
