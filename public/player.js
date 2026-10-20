@@ -1,13 +1,14 @@
 export class Player {
     constructor(audio, changed, persist, failed, random = Math.random) {
         Object.assign(this, { audio, changed, persist, failed, random });
-        this.queue = []; this.current = null; this.shuffle = false; this.repeat = 'off'; this.history = []; this.failedIds = new Set(); this.cycle = new Set();
+        this.queue = []; this.current = null; this.shuffle = false; this.repeat = 'off'; this.history = []; this.wantedPlayback = false; this.failedIds = new Set(); this.cycle = new Set();
         audio.addEventListener('ended', () => this.advance(true));
-        audio.addEventListener('error', () => { this.failedIds.add(this.current); this.failed('Arquivo removido, inacessível ou incompatível. Importe novamente ou escolha outra faixa.'); this.advance(true, true); });
+        audio.addEventListener('error', () => { this.failedIds.add(this.current); this.failed('Arquivo removido, inacessível ou incompatível. Importe novamente ou escolha outra faixa.'); if (this.wantedPlayback) this.advance(true, true); else this.changed(); });
         for (const event of ['play', 'pause', 'timeupdate', 'loadedmetadata', 'durationchange']) audio.addEventListener(event, () => changed());
     }
     update() { this.changed(); this.persist(); }
     restore(preferences, tracks) {
+        this.wantedPlayback = false;
         const ids = new Set(tracks.map(t => t.id));
         this.queue = (preferences.queue || []).filter(id => ids.has(id));
         this.current = this.queue.includes(preferences.current) ? preferences.current : null;
@@ -17,6 +18,7 @@ export class Player {
         this.changed();
     }
     async play(id, queue = null) {
+        this.wantedPlayback = true;
         if (queue) { this.queue = [...new Set(queue)]; this.cycle.clear(); this.history = []; this.failedIds.clear(); }
         if (!this.queue.includes(id)) this.queue.push(id);
         if (this.current && this.current !== id) this.history.push(this.current);
@@ -26,8 +28,9 @@ export class Player {
     }
     toggle() {
         if (!this.current && this.queue.length) return this.play(this.queue[0]);
-        if (this.current) { if (this.audio.paused) { this.failedIds.clear(); this.audio.play().catch(() => this.failed('Não foi possível reproduzir esta faixa. Escolha outra.')); } else this.audio.pause(); }
+        if (this.current) { if (this.audio.paused) { this.wantedPlayback = true; this.failedIds.clear(); this.audio.play().catch(() => this.failed('Não foi possível reproduzir esta faixa. Escolha outra.')); } else this.pause(); }
     }
+    pause() { this.wantedPlayback = false; this.audio.pause(); }
     advance(natural = false, error = false) {
         if (!this.queue.length) return;
         if (natural && !error && this.repeat === 'one') { this.audio.currentTime = 0; return this.play(this.current); }
@@ -42,7 +45,7 @@ export class Player {
             next = candidates.find(id => !this.failedIds.has(id));
         }
         if (next) { if (next === this.current) this.audio.currentTime = 0; return this.play(next); }
-        this.audio.pause(); this.changed();
+        this.pause(); this.changed();
     }
     previous() {
         if (this.audio.currentTime > 3) { this.audio.currentTime = 0; return; }
@@ -54,11 +57,11 @@ export class Player {
         const index = this.queue.indexOf(id), wasPlaying = !this.audio.paused;
         this.queue = this.queue.filter(item => item !== id); this.history = this.history.filter(item => item !== id); this.cycle.delete(id);
         if (this.current === id) {
-            this.audio.pause(); this.audio.removeAttribute('src'); this.audio.load(); this.current = null;
+            this.pause(); this.audio.removeAttribute('src'); this.audio.load(); this.current = null;
             const next = this.queue[index] || this.queue[0];
             if (next && wasPlaying) this.play(next);
         }
         this.update();
     }
-    clear() { this.audio.pause(); this.audio.removeAttribute('src'); this.audio.load(); this.queue = []; this.current = null; this.history = []; this.cycle.clear(); this.failedIds.clear(); this.update(); }
+    clear() { this.pause(); this.audio.removeAttribute('src'); this.audio.load(); this.queue = []; this.current = null; this.history = []; this.cycle.clear(); this.failedIds.clear(); this.update(); }
 }

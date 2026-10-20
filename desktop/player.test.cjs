@@ -18,3 +18,9 @@ test('shuffle visits each track before repeating and errors terminate even with 
 test('restoration filters missing IDs and never autoplays', async () => {
     const p = await setup(); p.restore({ queue: ['a', 'missing'], current: 'a', volume: 0.3, shuffle: true, repeat: 'all' }, [{ id: 'a' }]); assert.deepEqual(p.queue, ['a']); assert.equal(p.audio.paused, true); assert.equal(p.audio.volume, 0.3);
 });
+
+test('a missing restored track or a paused track does not start the next track without user action', async () => {
+    const p = await setup(); p.restore({ queue: ['a', 'b'], current: 'a' }, [{ id: 'a' }, { id: 'b' }]);
+    p.audio.dispatchEvent(new Event('error')); assert.equal(p.current, 'a'); assert.equal(p.audio.paused, true);
+    await p.play('a'); p.pause(); p.audio.dispatchEvent(new Event('error')); assert.equal(p.current, 'a'); assert.equal(p.audio.paused, true);
+});
