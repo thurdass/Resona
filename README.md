@@ -1,74 +1,93 @@
 # Resona
 
-Aplicativo desktop Linux com PHP 8.3+, Laravel 13 e shell Electron. Início,
-busca por faixas/artistas/álbuns, páginas de entidades e biblioteca com faixas
-salvas, filtro e ordenação. Identidade própria e catálogo fictício local.
+Player de músicas locais para desktop Linux. Abra o aplicativo, importe arquivos
+ou pastas e escolha uma faixa para reproduzir. Funciona offline, sem contas,
+streaming, telemetria ou recursos remotos obrigatórios.
 
 ## Executar
 
-Requisitos: PHP 8.3+ com extensões exigidas pelo Composer (incluindo mbstring,
-DOM/XML e SQLite para os testes padrão), Composer, Node.js 22.12+ e npm,
-sessão gráfica Linux e bibliotecas de runtime do Electron/Chromium.
+Desenvolvimento: PHP 8.3+ (PDO SQLite, mbstring, fileinfo, DOM/XML, tokenizer,
+OpenSSL), Composer, Node 22.12+ e npm; sessão gráfica e bibliotecas do Electron.
 
 ```bash
 composer run setup
 ./bin/resona
 ```
 
-O shell inicia e encerra seu próprio servidor PHP em `127.0.0.1`, numa porta
-livre. A biblioteca fica em sessões de arquivo no diretório de dados do Electron
-(`~/.config/Resona` por padrão); chave e cookies persistem entre execuções.
-Não precisa de servidor externo ou banco para os fluxos de música.
-Use `RESONA_PHP=/caminho/php` para selecionar outro executável PHP.
+O Electron inicia e encerra o Laravel em uma porta livre de `127.0.0.1`.
+`RESONA_PHP` seleciona outro executável PHP; `RESONA_DATA_DIR` seleciona um
+perfil separado (caminho absoluto). CSS, JavaScript e DejaVu Sans são locais,
+sem Vite ou downloads durante o uso.
 
-Para desenvolvimento no navegador: `composer run dev`, acessando o endereço
-local exibido. As sessões do navegador são independentes das sessões desktop.
-CSS e JavaScript são servidos diretamente; não há build Vite.
+## Sua coleção
 
-Neste host, o helper SUID do Electron não está configurado e a execução padrão
-aborta antes de abrir a janela. O teste visual foi executado em Xvfb/X11 com
-`--no-sandbox`; isso não valida o sandbox de produção. A distribuição desktop
-precisa configurar o sandbox Chromium conforme a política da distribuição Linux.
-Para reproduzir estritamente o teste em sessão virtual:
+- **Abrir músicas** seleciona vários arquivos; **Importar pasta** percorre
+  subpastas. Arraste arquivos sobre a janela para importar.
+- Importar não inicia áudio. Clique em uma faixa ou em **Reproduzir seleção**.
+- Coleção, favoritos, álbuns, artistas e playlists usam os arquivos importados.
+  Busque por título, artista ou álbum e ordene a lista.
+- **+** adiciona à fila; **×** remove da fila. O menu **•••** inclui ações de
+  playlist e remoção da coleção. Remover nunca apaga o arquivo original.
+- Transporte inferior: pausa, anterior, próxima, posição, volume, aleatório e
+  repetição desligada / toda a fila / uma faixa. Navegação preserva o mesmo áudio.
+- Biblioteca, playlists, favoritos, volume, repetição, aleatório e fila persistem
+  em SQLite em `~/.config/Resona/library.sqlite` (ou `$XDG_CONFIG_HOME/Resona`).
+  Ao reabrir, a reprodução aguarda ação explícita. A posição não é restaurada.
+- O importador referencia caminhos canônicos e evita duplicatas por caminho;
+  cópias em locais distintos são itens distintos. Links simbólicos são ignorados
+  na importação para evitar ciclos e atravessamento inesperado de pastas.
+- getID3 lê tags e capas (JPEG/PNG/WebP até 5 MiB). Campos ausentes recebem nomes
+  legíveis e capa substituta. Não há edição de tags nem cópia das músicas.
+- Formatos oferecidos: MP3, FLAC, WAV, Ogg, Opus, M4A, AAC, AIFF e WebM.
+  Decodificação depende do codec suportado pelo Electron; falhas indicam ação
+  útil e a fila procura outra faixa, sem repetição infinita de arquivos inválidos.
+  Arquivos movidos precisam ser importados na localização atual.
 
-```bash
-RESONA_SMOKE_OUTPUT=/tmp/resona-smoke xvfb-run -a npm run desktop:smoke -- --no-sandbox --ozone-platform=x11
-```
+Atalhos: Espaço pausa/reproduz; ←/→ busca 5 s; ↑/↓ ajusta volume;
+Alt+←/→ muda de faixa; Ctrl+O abre músicas. Controles e campos mantêm seu
+comportamento próprio ao receber foco. A janela permite abrir/fechar a fila,
+mostra foco e respeita movimento reduzido.
 
-`--no-sandbox` reduz o isolamento do Chromium e não é ativado automaticamente
-pelo Resona. O aplicativo exige instalação local das dependências; ainda não
-há AppImage, pacote DEB ou PHP embarcado.
+## Arquitetura e limites de acesso
 
-## Catálogo e áudio
+Laravel/PHP centraliza metadados e persistência; SQLite elimina dependência de
+sessões HTTP. Electron mantém renderer isolado, sandbox habilitado e três
+operações na ponte: escolher arquivos, escolher pasta e importar objetos File
+recebidos por arraste. O processo principal autoriza a importação com segredo
+aleatório por execução; o renderer nunca recebe esse segredo nem caminhos.
+Áudio e capas usam IDs da biblioteca; não há rota pública de leitura por caminho.
+As mutações da interface exigem CSRF. Pedidos externos e permissões do renderer
+são bloqueados. O serviço PHP atende apenas loopback; não é um servidor público.
 
-Os três artistas, três álbuns e nove faixas são fictícios, definidos em
-`resources/catalog/demo.php`. Os corações adicionam/removem faixas da biblioteca.
-O player inferior abre arquivos de áudio locais sem upload. As faixas demo
-não têm gravações; não há streaming ou integração com contas do Spotify.
-A reprodução de áudio local termina ao navegar para outra página nesta versão.
-
-## Investigação e rastreabilidade
-
-Consulte [docs/rea/README.md](docs/rea/README.md) para os hashes, Evidence IDs,
-achados estáticos, hipóteses, bloqueios de runtime e a relação com cada fluxo.
-O MCP REA analisou os recursos empacotados do Spotify; sua UI não foi observada
-em execução. Cores, geometria e composição visual são decisões próprias.
-Nenhum código, fonte, imagem ou gravação do Spotify é usado pelo aplicativo.
+Um único elemento de áudio vive fora das telas, renderizadas no mesmo documento.
+NativePHP não está instalado: sua documentação v2 indica PHP 8.3+, Laravel 11+,
+Node 22+ e Linux, mas usa Electron e não demonstrou vantagem que justificasse
+migrar o shell existente. Veja [instalação oficial](https://nativephp.com/docs/desktop/2/getting-started/installation).
 
 ## Verificação
 
 ```bash
-php artisan test
+php artisan test --compact
 npm run test:desktop
+RESONA_SMOKE_OUTPUT=/tmp/resona-smoke xvfb-run -a npm run desktop:smoke -- --no-sandbox --ozone-platform=x11
 ```
 
-Os testes cobrem navegação, relações, busca/categorias/estados vazios, validação,
-escape HTML, salvar/remover/filtrar/ordenar, persistência após reiniciar o servidor
-desktop e rejeição de POST sem CSRF. O smoke gráfico testa o DOM real no Electron,
-busca, coração e biblioteca e grava capturas; ele exige sessão gráfica ou Xvfb.
+Os testes PHP cobrem importação real, UTF-8, duplicatas, arquivos inválidos e
+removidos, autorização, ranges, favoritos, playlists, preferências e preservação
+dos originais. Node verifica persistência após reiniciar o servidor, CSRF e regras
+de fila. O smoke usa FFmpeg para gerar WAV/FLAC sintéticos, exercita Electron,
+ponte de arraste com File real, controles, continuidade, término natural,
+persistência, erros e duas dimensões de janela; grava capturas e `results.json`.
+A seleção do diálogo é automatizada no smoke; não comprova interação humana com
+o seletor do sistema. Estado do elemento, decodificação e avanço do tempo são
+verificados; saída audível não é confirmada.
 
-## Direção do produto
+Neste host, o sandbox Chromium não está configurado para a sessão virtual.
+`--no-sandbox` é explícito e restrito ao comando de teste acima; o Resona não o
+ativa automaticamente. A execução Linux normal exige suporte ao sandbox Chromium
+na distribuição. Não alteramos configurações globais ou permissões SUID.
 
-O desenvolvimento atual substitui o catálogo demonstrativo por uma coleção de
-arquivos reais, persistência local, fila e reprodução contínua. A descrição acima
-registra a referência anterior; cada entrega atualizará os fluxos disponíveis.
+O catálogo em `resources/catalog/demo.php` é fixture histórica, sem rotas de
+produto. Evidências anteriores de Spotify em `docs/rea` permanecem históricas;
+a investigação atual usa o próprio Electron/Resona. Nenhum recurso do Spotify
+é incluído no aplicativo.

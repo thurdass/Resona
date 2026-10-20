@@ -1,4 +1,4 @@
-const { spawn } = require('node:child_process');
+const { spawn, spawnSync } = require('node:child_process');
 const net = require('node:net');
 const { mkdir, access, readFile, writeFile } = require('node:fs/promises');
 const path = require('node:path');
@@ -20,15 +20,17 @@ async function startServer(root, dataPath, php = 'php') {
         key = `base64:${randomBytes(32).toString('base64')}`;
         await writeFile(keyPath, key, { mode: 0o600, flag: 'wx' });
     }
+    const database = path.join(dataPath, 'library.sqlite');
+    await writeFile(database, '', { flag: 'a', mode: 0o600 });
+    const importToken = randomBytes(32).toString('hex');
     const port = await freePort();
     const origin = `http://127.0.0.1:${port}`;
+    const environment = { ...process.env, DB_URL: '', DB_CONNECTION: 'sqlite', DB_DATABASE: database, RESONA_IMPORT_TOKEN: importToken, APP_NAME: 'Resona', APP_ENV: 'production', APP_DEBUG: 'false', APP_KEY: key.trim(), APP_URL: origin, APP_CONFIG_CACHE: path.join(dataPath, 'config.php'), SESSION_DRIVER: 'file', SESSION_FILES: path.join(dataPath, 'sessions'), SESSION_COOKIE: 'resona_session', CACHE_STORE: 'array', LOG_CHANNEL: 'stderr', VIEW_COMPILED_PATH: path.join(dataPath, 'views') };
+    const migration = spawnSync(php, [path.join(root, 'artisan'), 'migrate', '--force', '--no-interaction'], { cwd: root, env: environment, encoding: 'utf8' });
+    if (migration.status !== 0) throw new Error(`Falha na migração: ${migration.stderr || migration.stdout}`);
     const child = spawn(php, ['-S', `127.0.0.1:${port}`, '-t', path.join(root, 'public'), path.join(root, 'desktop/router.php')], {
         cwd: root,
-        env: { ...process.env, APP_NAME: 'Resona', APP_ENV: 'production', APP_DEBUG: 'false', APP_KEY: key.trim(), APP_URL: origin,
-            APP_CONFIG_CACHE: path.join(dataPath, 'config.php'),
-            SESSION_DRIVER: 'file', SESSION_FILES: path.join(dataPath, 'sessions'), SESSION_COOKIE: 'resona_session',
-            SESSION_EXPIRE_ON_CLOSE: 'false', SESSION_LIFETIME: '525600',
-            CACHE_STORE: 'array', LOG_CHANNEL: 'stderr', VIEW_COMPILED_PATH: path.join(dataPath, 'views') },
+        env: environment,
         stdio: ['ignore', 'ignore', 'pipe'],
     });
     let failure;
@@ -41,7 +43,7 @@ async function startServer(root, dataPath, php = 'php') {
             if (child.exitCode !== null) throw new Error(`PHP encerrou: ${logs}`);
             try {
                 const response = await fetch(`${origin}/up`, { signal: AbortSignal.timeout(500) });
-                if (response.ok) return { origin, child, stop: () => { if (child.exitCode === null) child.kill(); } };
+                if (response.ok) return { origin, child, importToken, stop: () => { if (child.exitCode === null) child.kill(); } };
             } catch { /* waiting for Laravel startup */ }
             await new Promise(resolve => setTimeout(resolve, 100));
         }
