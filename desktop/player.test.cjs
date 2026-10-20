@@ -13,7 +13,7 @@ test('queue advances, repeats, removes current and clears without stale audio', 
 });
 test('shuffle visits each track before repeating and errors terminate even with repeat enabled', async () => {
     const p = await setup(); p.shuffle = true; await p.play('a', ['a', 'b', 'c']); p.advance(true); assert.equal(p.current, 'b'); p.advance(true); assert.equal(p.current, 'c'); p.advance(true); assert.equal(p.audio.paused, true);
-    p.repeat = 'all'; p.audio.dispatchEvent(new Event('error')); p.audio.dispatchEvent(new Event('error')); p.audio.dispatchEvent(new Event('error')); assert.equal(p.audio.paused, true); assert.equal(p.failedIds.size, 3);
+    await p.play('a', ['a', 'b', 'c']); p.repeat = 'all'; p.audio.dispatchEvent(new Event('error')); p.audio.dispatchEvent(new Event('error')); p.audio.dispatchEvent(new Event('error')); assert.equal(p.audio.paused, true); assert.equal(p.failedIds.size, 3);
 });
 test('restoration filters missing IDs and never autoplays', async () => {
     const p = await setup(); p.restore({ queue: ['a', 'missing'], current: 'a', volume: 0.3, shuffle: true, repeat: 'all' }, [{ id: 'a' }]); assert.deepEqual(p.queue, ['a']); assert.equal(p.audio.paused, true); assert.equal(p.audio.volume, 0.3);

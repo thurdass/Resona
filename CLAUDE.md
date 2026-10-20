@@ -151,3 +151,12 @@ Referência confirmada em 2026-10-20 antes da implementação: PHP 8.3.6,
 Laravel 13.37.0, Electron 44.9.1 direto; NativePHP ausente. Testes iniciais:
 3 PHP/52 asserções e 1 Node aprovados. Sem .ai/rules. .agents/ e
 skills-lock.json já eram não rastreados; preservá-los fora dos commits do produto.
+
+Estado implementado nesta entrega: Electron direto + Laravel + SQLite, sem
+NativePHP. `LocalLibrary` importa por autorização do processo principal e lê
+metadados via getID3 1.9.27; `LibraryController` expõe IDs, não caminhos. O
+renderer usa navegação por fragmentos e um único áudio em `public/player.js`.
+Favoritos/playlists/preferências ficam no banco. O servidor desktop migra seu
+banco no perfil antes de abrir a janela. Rotas são locais, sem CORS, hosts apenas
+loopback. `desktop/package.cjs` gera tar Linux x64 com PHP estático fixado por
+hash; não inserir dados do perfil nem arquivos de áudio originais no pacote.

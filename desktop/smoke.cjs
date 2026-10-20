@@ -81,7 +81,14 @@ async function runSmoke(win, server, output) {
         await win.loadURL(server.origin);
         await wait('document.querySelectorAll(".track").length === 2 && document.querySelector("#playlists a")?.textContent === "Ensaios"');
         if (!await run('resonaPlayer.audio.paused && resonaPlayer.audio.volume === 0.35 && document.querySelector("button[aria-label^=Favoritar][aria-pressed=true]") !== null')) throw new Error('Estado persistente ou ausência de autoplay falhou');
-        const result = { before, after, checks: ['external network unavailable via dead proxy, loopback direct', 'embedded FLAC cover decoded', 'reload restores preferences/favorite/playlist without autoplay', 'native multiple selection', 'folder deduplication', 'real File drag/drop IPC', 'WAV/FLAC decode and advancing time', 'navigation continuity', 'pause/seek/volume', 'natural end advances', 'favorite', 'playlist', 'typing shortcuts', 'compact layout', 'missing file recovery', 'clear queue'], audibleOutputVerified: false, consoleErrors: errors };
+        await run(`resonaPlayer.queue = ${JSON.stringify(state.tracks.map(track => track.id))}; resonaPlayer.current = ${JSON.stringify(current)}; resonaPlayer.update()`);
+        await new Promise(resolve => setTimeout(resolve, 300));
+        await win.loadURL(server.origin);
+        await wait('document.querySelector("#notice").textContent.includes("inacessível")');
+        if (!await run(`resonaPlayer.audio.paused && resonaPlayer.current === ${JSON.stringify(current)}`)) throw new Error('Faixa restaurada inválida iniciou outra música sem ação');
+        await run('resonaPlayer.clear()');
+        await new Promise(resolve => setTimeout(resolve, 300));
+        const result = { before, after, checks: ['external network unavailable via dead proxy, loopback direct', 'embedded FLAC cover decoded', 'reload restores preferences/favorite/playlist without autoplay', 'native multiple selection', 'folder deduplication', 'real File drag/drop IPC', 'WAV/FLAC decode and advancing time', 'navigation continuity', 'pause/seek/volume', 'natural end advances', 'favorite', 'playlist', 'typing shortcuts', 'compact layout', 'missing file recovery', 'clear queue', 'missing restored track cannot autoplay'], audibleOutputVerified: false, consoleErrors: errors };
         await fs.writeFile(path.join(output, 'results.json'), JSON.stringify(result, null, 2));
         console.log('Desktop smoke passed:', JSON.stringify(result));
     } finally { dialog.showOpenDialog = originalDialog; }

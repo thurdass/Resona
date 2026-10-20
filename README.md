@@ -64,6 +64,30 @@ NativePHP não está instalado: sua documentação v2 indica PHP 8.3+, Laravel 1
 Node 22+ e Linux, mas usa Electron e não demonstrou vantagem que justificasse
 migrar o shell existente. Veja [instalação oficial](https://nativephp.com/docs/desktop/2/getting-started/installation).
 
+## Pacote Linux x64
+
+```bash
+npm run package:linux
+tar -xzf dist/resona-linux-x64.tar.gz
+./resona-linux-x64/resona
+```
+
+O arquivo contém Electron 44.9.1, código Laravel, dependências de produção,
+fontes e PHP 8.3.31 estático com SQLite e extensões necessárias. Não requer PHP,
+Composer ou Node instalados no computador de destino. Ainda requer bibliotecas
+gráficas/áudio do Linux e sandbox Chromium funcional. É um diretório portátil
+compactado, sem instalador DEB/AppImage ou atualização automática.
+
+O build baixa PHP do projeto oficial `NativePHP/php-bin`, fixado por commit e
+SHA-256 no empacotador, e verifica as extensões. A primeira construção precisa de
+rede ou caches preenchidos; o aplicativo instalado não. Os originais e o perfil
+do desenvolvedor não entram no pacote. O diretório `dist/` não é versionado.
+
+O pacote foi extraído e executado em `/tmp`, usando seu PHP embarcado, com o
+mesmo smoke da árvore de desenvolvimento. O teste configura proxy externo sem
+serviço e exceção para loopback; isso simula indisponibilidade externa sem mudar
+a rede do host. Não é uma certificação de compatibilidade com todas as distros.
+
 ## Verificação
 
 ```bash
@@ -91,3 +115,5 @@ O catálogo em `resources/catalog/demo.php` é fixture histórica, sem rotas de
 produto. Evidências anteriores de Spotify em `docs/rea` permanecem históricas;
 a investigação atual usa o próprio Electron/Resona. Nenhum recurso do Spotify
 é incluído no aplicativo.
+
+Evidências da entrega local: [docs/rea/local-player.md](docs/rea/local-player.md).

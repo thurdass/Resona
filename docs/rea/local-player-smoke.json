@@ -1,0 +1,33 @@
+{
+  "before": {
+    "time": 0.489597,
+    "id": "68b61488-75ac-4e46-9a21-009dd55b95af"
+  },
+  "after": {
+    "time": 0.896339,
+    "id": "68b61488-75ac-4e46-9a21-009dd55b95af",
+    "decoded": 4,
+    "duration": 16
+  },
+  "checks": [
+    "external network unavailable via dead proxy, loopback direct",
+    "embedded FLAC cover decoded",
+    "reload restores preferences/favorite/playlist without autoplay",
+    "native multiple selection",
+    "folder deduplication",
+    "real File drag/drop IPC",
+    "WAV/FLAC decode and advancing time",
+    "navigation continuity",
+    "pause/seek/volume",
+    "natural end advances",
+    "favorite",
+    "playlist",
+    "typing shortcuts",
+    "compact layout",
+    "missing file recovery",
+    "clear queue",
+    "missing restored track cannot autoplay"
+  ],
+  "audibleOutputVerified": false,
+  "consoleErrors": []
+}
